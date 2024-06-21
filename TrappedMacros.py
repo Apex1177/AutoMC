@@ -1,12 +1,12 @@
 from pyautogui import *
 import pyautogui, time, keyboard, random, win32api, win32con, os, sys, threading, customtkinter, multiprocessing
-
+from PIL import Image, ImageGrab
 
 def WaitingLoop(): #waits for a hotkey to be pressed
     #HoldM1_thread = threading.Thread(target=HoldM1, daemon=True)
     keyboard.add_hotkey(']', HoldM1)
     keyboard.add_hotkey('-', Condense)
-    #keyboard.add_hotkey('=', AutoFish) #does not work currently
+    keyboard.add_hotkey('=', AutoFish) 
     keyboard.add_hotkey('esc+shift', RestartProgram)
     keyboard.wait()
 
@@ -16,7 +16,7 @@ def Condense():
     pyautogui.press('enter')   
 
 def AutoFish():#DOES NOT WORK / NOT ACCURATE
-    pass
+    FindBobber()
     #while 1:
         #if pyautogui.locateOnScreen('MinecraftBobber.png', confidence=.4) != None:
             #print('I see it')
@@ -25,6 +25,28 @@ def AutoFish():#DOES NOT WORK / NOT ACCURATE
             #print("I cant see it")
             #time.sleep(.5)
     
+def FindBobber(): #need to make more efficient / search smaller area
+    xstartcord = 0
+    ystartcord= 0
+
+    xcounter =0 
+    ycounter = 0
+
+    pixel = ImageGrab.grab().load()
+    while 1:
+            color = pixel[xstartcord+xcounter, ystartcord+ycounter]
+            xcounter+=3
+            if xcounter>=1920: #X END CORD
+                xcounter = 0
+                ycounter+=3
+                if ycounter>=1080:#Y END CORD
+                    print("BOBBER NOT FOUND")
+                    break
+            print(color)
+            if color == (211, 42, 42):#THIS WORKS FINALLY
+                print('BOBBER FOUND')
+                print(xstartcord+xcounter, ystartcord+ycounter)
+                break
 
 def AutoMiner():
     pass
@@ -89,7 +111,7 @@ root.geometry("1000x700") #size of application
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
 
-label = customtkinter.CTkLabel(master=frame, text="Trapped Macros alpha", font=("Roboto", 24))
+label = customtkinter.CTkLabel(master=frame, text="AutoTrappedMC alpha", font=("Roboto", 24))
 label.pack(pady=12, padx=10)
 
 
