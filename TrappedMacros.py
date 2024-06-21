@@ -17,36 +17,34 @@ def Condense():
 
 def AutoFish():#DOES NOT WORK / NOT ACCURATE
     FindBobber()
-    #while 1:
-        #if pyautogui.locateOnScreen('MinecraftBobber.png', confidence=.4) != None:
-            #print('I see it')
-            #time.sleep(.5)
-        #else:
-            #print("I cant see it")
-            #time.sleep(.5)
     
-def FindBobber(): #need to make more efficient / search smaller area
-    xstartcord = 0
-    ystartcord= 0
-
-    xcounter =0 
+def FindBobber(): #finds the bobber and returns its locations
+    xstartcord = 900 #start and end cords are for making the box to search for the bobber
+    ystartcord= 350 
+    xendcord = 1000
+    yendcord = 600
+    xcounter = 0 
     ycounter = 0
-
     pixel = ImageGrab.grab().load()
     while 1:
-            color = pixel[xstartcord+xcounter, ystartcord+ycounter]
-            xcounter+=3
-            if xcounter>=1920: #X END CORD
+        try:
+            color = pixel[xstartcord+xcounter, ystartcord+ycounter] #returns the RGB color of the pixel checked in a tuple 
+            xcounter+=3 #at the distance viewed "minecraft pixels" are 3x3 of pixels, so we can skip 3 at a time for efficiency, same for y below
+            if xcounter+xstartcord>=xendcord: #When the y counter is above the end cord it resets to go to the next line
                 xcounter = 0
                 ycounter+=3
-                if ycounter>=1080:#Y END CORD
+                if ycounter+ystartcord>=yendcord:#same as above but for x and when it reaches the end then the bobber isnt found
                     print("BOBBER NOT FOUND")
                     break
             print(color)
-            if color == (211, 42, 42):#THIS WORKS FINALLY
+            print(xstartcord+xcounter, ystartcord+ycounter)
+            if color == (211, 42, 42):#RBG of the bobber 
                 print('BOBBER FOUND')
                 print(xstartcord+xcounter, ystartcord+ycounter)
                 break
+        except:
+            print("BOBBER NOT FOUND + EXCEPTION")
+            break
 
 def AutoMiner():
     pass

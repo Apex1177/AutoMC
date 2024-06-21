@@ -6,7 +6,15 @@ from PIL import Image, ImageGrab
 # !!!!! This file is for testing functions and is not used in the actual program !!!!
 
 
-#print(pyautogui.displayMousePosition())
+print(pyautogui.displayMousePosition())
+
+# x start 930 
+# x end 1000
+# y start 500
+# y end 1000
+
+
+
 time.sleep(3)
 
     #pix = pyautogui.pixel(100, 200)
