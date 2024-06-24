@@ -8,13 +8,16 @@ from PIL import Image, ImageGrab
 
 print(pyautogui.displayMousePosition())
 
+#1500, 550
+
 # x start 930 
 # x end 1000
 # y start 500
 # y end 1000
 
+#208, 41, 41
 
-
+#1015, 490
 time.sleep(3)
 
     #pix = pyautogui.pixel(100, 200)
