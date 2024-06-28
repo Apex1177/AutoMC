@@ -22,7 +22,7 @@ if __name__ == '__main__':
     FishCounter = random.randint(0, 3)
 
     #1500, 550
-    #penisfartexplosion
+    
     # starttimer = time.time()
     # print(starttimer)
     # while 1:
