@@ -3,73 +3,87 @@ import pyautogui, time, keyboard, random, win32api, win32con, os, sys, threading
 from PIL import Image, ImageGrab
 
 def WaitingLoop(): #waits for a hotkey to be pressed
-    #HoldM1_thread = threading.Thread(target=HoldM1, daemon=True)
     print('Waiting Loop...')
     keyboard.add_hotkey(']', HoldM1)
-    keyboard.add_hotkey('-', Condense)
+    keyboard.add_hotkey('tab', Condense)
+    keyboard.add_hotkey("'", SellAll)
     keyboard.add_hotkey('=', AutoFish) 
     keyboard.add_hotkey('esc+shift', RestartProgram)
     keyboard.wait()
 
 def Condense(): #hotkey to run /condense cmd
     pyautogui.press('enter')
-    pyautogui.write('/condense', interval=random.uniform(0.025, 0.04))
+    pyautogui.write('/con', interval=random.uniform(0.025, 0.04))
+    pyautogui.press('tab')   #presses tab to autocomplete 
     pyautogui.press('enter')   
-
-
+def SellAll():
+    pyautogui.press('enter')
+    pyautogui.write('/se', interval=random.uniform(0.025, 0.04))
+    pyautogui.press('tab')  
+    pyautogui.press('tab')  
+    pyautogui.press('enter') 
 
 def AutoFish(): #Auto fishes moveto does not work currently
     FishCounter = random.randint(0, 3)
     TurnCounter = 0
     while keyboard.is_pressed('esc') == False:
+
         if autosellbool == '1':
             if FishCounter >= 30: #untested autosell
                 pyautogui.press('enter')
                 pyautogui.write('/emf shop', interval=random.uniform(0.025, 0.04))
                 pyautogui.press('enter')
                 time.sleep(random.uniform(0.05, 0.1))
-                pyautogui.moveTo(1015, 0, random.uniform(0.4, 0.8))
+                pyautogui.moveTo(1015, 490, random.uniform(0.4, 0.8))
                 time.sleep(random.uniform(0.05, 0.1))
                 pyautogui.click()
                 time.sleep(random.uniform(0.05, 0.1))
                 pyautogui.click()
-                time.sleep(random.uniform(0.05, 0.1))
-                pyautogui.press('esc')
                 time.sleep(random.uniform(0.05, 0.1))
                 FishCounter = random.randint(0, 3)
-        if TurnCounter <= 3:
-            pydirectinput.moveTo(1300, 0)
-        if TurnCounter<=6:
-            pydirectinput.moveTo(700, 0)
+
+        randomadd = random.randint(0, 6)
+
         TurnCounter+=1
-        if TurnCounter == 7:
+        if TurnCounter < 3: 
+            pyautogui.moveTo(1170+randomadd, 531, random.uniform(0.2, 0.25)) #960 x is center of the screen and 531 y is center when not in fullscreen
+        if TurnCounter > 3: 
+            pyautogui.moveTo(750+randomadd, 531, random.uniform(0.2, 0.25))
+        if TurnCounter > 6:
             TurnCounter = 0
-        time.sleep(random.uniform(0.05, 0.1))
+        
+        time.sleep(random.uniform(0.2, 0.3))
+
         pyautogui.click(button='right')
-        time.sleep(2.2)
+        time.sleep(2.5)
         BobberCords=FindBobber()
         print("THESE ARE BOBBER CORDS")
         print(BobberCords)
         xcord = BobberCords[0]
         ycord = BobberCords[1]
         confidencecounter = 0
+        starttimer = time.time()
         while 1:
+            endtimer = time.time()
+            if (endtimer-starttimer) > 20: #if the program gets stuck it will timeout after x seconds and reset
+                print("TIMEOUT RESET")
+                break
             pix = pyautogui.pixel(xcord, ycord)
-            print(pix)
+            #print(pix)
             if pix[2] >= 100 and pix[2] <=200:     #check if B value of RGB is between 100 and 200 if true fish detected
                 print("MIGHT BE FISH")
                 confidencecounter+=1
-                time.sleep(.05)
+                time.sleep(.15)
                 if confidencecounter == 2:
                     FishCounter+=1
                     print('FISH FOUND')
                     print(pix)
-                    pyautogui.click(button='right')
-                    time.sleep(.1)
                     break
             else:
                 confidencecounter = 0
-            time.sleep(.3)
+            time.sleep(.25)
+        pyautogui.click(button='right')
+        time.sleep(.1)
 
 def FindBobber(): #finds the bobber and returns its locations
     xstartcord = 900 #start and end cords are for making the box to search for the bobber
@@ -95,12 +109,12 @@ def FindBobber(): #finds the bobber and returns its locations
             print(xstartcord+xcounter, ystartcord+ycounter)
             if color == (211, 42, 42) or color == (208, 41, 41):#RBG of the bobber 
                 print('BOBBER FOUND')
-                BobberCords = (xstartcord+xcounter, ystartcord+ycounter)
+                BobberCords = (xstartcord+xcounter+2, ystartcord+ycounter-2)
                 return BobberCords
         except:
             print("BOBBER NOT FOUND + EXCEPTION")
             pyautogui.click(button='right')
-            AutoFish()
+            AutoFish() 
 
 def AutoMiner():
     pass
@@ -110,17 +124,14 @@ def AutoChatGame():
 
 def AutoSell():
     while keyboard.is_pressed('esc') == False:
-        print('Autosell is on')
+        print('Autoselling')
         pyautogui.keyUp('w')
         pyautogui.mouseUp()     
         time.sleep(random.uniform(.6, 1.1))
-        pyautogui.press('enter')
-        pyautogui.write('/condense', interval=random.uniform(0.025, 0.04)) # issue where it types slower than its supposed to... why did threading break this?
-        pyautogui.press('enter')
+        Condense() # issue where it types slower than its supposed to... why did threading break this? #update I believe its an issue with multithreading in python and made it press tab to autocomplete
         time.sleep(random.uniform(.6, 1.1))
-        pyautogui.press('enter')
-        pyautogui.write('/sellall', interval=random.uniform(0.025, 0.04))
-        pyautogui.press('enter')
+        SellAll()
+        pyautogui.click(button='right')
         pyautogui.keyDown('w')
         pyautogui.mouseDown()
         time.sleep(random.randint(55, 65)) 
@@ -130,6 +141,7 @@ def AutoSell():
 def HoldM1(): #holds M1 and w until esc is pressed on the keyboard
     print('Holding M1')
     if autosellbool == '1':
+        print('Autosell is on')
         TimerThread = threading.Timer(50, AutoSell, args=[]) # added a timer thread to fix issue where you could not escape the program during a time.sleep()
         TimerThread.start()
     pyautogui.keyDown('w')
@@ -140,6 +152,7 @@ def HoldM1(): #holds M1 and w until esc is pressed on the keyboard
     pyautogui.mouseUp()
     TimerThread.cancel()
     print('Not holding M1')
+    RestartProgram()
 
 
 def RestartProgram():
@@ -159,8 +172,21 @@ root.geometry("1000x700") #size of application
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
 
-label = customtkinter.CTkLabel(master=frame, text="AutoTrappedMC alpha", font=("Roboto", 24))
+label = customtkinter.CTkLabel(master=frame, text="AutoTrappedMC alpha", font=("Roboto", 36))
 label.pack(pady=12, padx=10)
+label1 = customtkinter.CTkLabel(master=frame, text="Hotkeys Below", font=("Roboto", 30))
+label1.pack(pady=6, padx=10)
+
+label2 = customtkinter.CTkLabel(master=frame, text="Condense ' tab '", font=("Roboto", 24))
+label2.pack(pady=6, padx=10)
+label3 = customtkinter.CTkLabel(master=frame, text="Sellall ' ' '", font=("Roboto", 24))
+label3.pack(pady=6, padx=10)
+label4 = customtkinter.CTkLabel(master=frame, text="Hold M1 & W ' ] '", font=("Roboto", 24))
+label4.pack(pady=6, padx=10)
+label5 = customtkinter.CTkLabel(master=frame, text="Autofish - can't be fullscreen' = '", font=("Roboto", 24))
+label5.pack(pady=6, padx=10)
+label6 = customtkinter.CTkLabel(master=frame, text="Restart Program ' esc+shift '", font=("Roboto", 24))
+label6.pack(pady=6, padx=10)
 
 
 #buttonyes = customtkinter.CTkButton(master=frame, text="Yes", autosellbool = True)
@@ -181,6 +207,6 @@ autosellcheckbox.pack(pady=12, padx=10)
 
 
 if __name__ == '__main__':
-    root.mainloop()
+    root.mainloop() # need to add something to show which hotkeys do what
     print('Progam started')
     WaitingLoop()
