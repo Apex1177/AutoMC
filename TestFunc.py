@@ -38,7 +38,6 @@ if __name__ == '__main__':
 
     #208, 41, 41
 
-    #1015, 490
     #time.sleep(3)
 
         #pix = pyautogui.pixel(100, 200)
