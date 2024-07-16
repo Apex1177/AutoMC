@@ -1,6 +1,6 @@
 from pyautogui import *
-import pyautogui, time, keyboard, random, win32api, win32con, os, sys, threading, customtkinter, multiprocessing, pydirectinput, signal
-from PIL import Image, ImageGrab
+import pyautogui, time, keyboard, random, os, sys, threading, customtkinter, multiprocessing, signal
+from PIL import ImageGrab
 
 def WaitingLoop(): #waits for a hotkey to be pressed
     print('Waiting Loop...')
@@ -21,8 +21,7 @@ def Condense(): #hotkey to run /condense cmd
 
 def SellAll():
     pyautogui.press('enter')
-    pyautogui.write('/se', interval=random.uniform(0.01, 0.02))
-    pyautogui.press('tab')  
+    pyautogui.write('/s', interval=random.uniform(0.01, 0.02))
     pyautogui.press('tab')  
     pyautogui.press('enter') 
 
@@ -36,20 +35,20 @@ def AutoFarm(): #this function farms and replants each layer of the farm, droppi
 
     RowUsed = FullRowCount #Default for what row is used
 
-    TimePerFarm = 5.5 #note this number needs to be changed based on how long it takes to run from one end of the farm to the other,I could have the program figure out this number through testing, but im lazy
+    TimePerFarm = 5.5 #note these number needs to be changed based on how long it takes to run from one end of the farm to the other
     TimePerPlant = 6.6
     
     SellCounter = random.randint(0,1)
 
-    Direction = 'd'
+    Direction = 'd' #direction you move in game
 
-    for Layer in range(FullLayers+PartialLayers):
-        if Layer == FullLayers:
+    for Layer in range(FullLayers+PartialLayers): #runs based on layers of farm plots
+        if Layer == FullLayers: #switches to partial layers after farming all full layers
             RowUsed = PartialRowCount
         pyautogui.keyDown(Direction)
         time.sleep(random.randint(2, 3))
         pyautogui.keyUp(Direction)
-        if (Layer % 2) == 0:
+        if (Layer % 2) == 0: #checks if the layer # is odd or even to switch direction after each layer
             Direction = 'a'
         else:
             Direction = 'd'
@@ -64,9 +63,6 @@ def AutoFarm(): #this function farms and replants each layer of the farm, droppi
             if SellCounter == 8:
                 SellAll()
                 SellCounter = random.randint(0,1)
-            
-
-        #put change layer part here so it executes after all layers are farmed
 
 def Farming(TimePerFarm):
     starttimer = time.time()
@@ -107,7 +103,7 @@ def MovementAdjustment(): #looks for a certain color of pixel in tilled dirt the
     #if needed I can redesign this to adjust movement to any future functions, but im not sure if I will need to do that
     xstartcord = 820 #creating the search box
     ystartcord = 570
-    xendcord = 1980
+    xendcord = 1920
     yendcord = 600
     objcolor1 = 111, 111, 111 #RBG of pixel im searching for
     objcolor2 = objcolor1 #im searching for only 1 RBG
@@ -127,15 +123,16 @@ def MovementAdjustment(): #looks for a certain color of pixel in tilled dirt the
                 break
         break
 
-def AutoFish(): #Auto fishes moveto does not work currently
+def AutoFish(): #Fishes automatically 
     FishCounter = random.randint(0, 2)
     TurnCounter = 0
     xstartcord = 900 #start and end cords are for making the box to search for the bobber
     ystartcord= 350 
     xendcord = 1000
     yendcord = 600
-    objcolor1 = 211, 42, 42
-    objcolor2 = 208, 41, 41
+    objcolor1 = 211, 42, 42 #RBG of bobber we are looking for
+    objcolor2 = 208, 41, 41 #2nd RBG of bobber
+
     while 1:
         FishCounter+=1
         print(FishCounter)
@@ -154,9 +151,10 @@ def AutoFish(): #Auto fishes moveto does not work currently
                 time.sleep(random.uniform(0.05, 0.1))
                 FishCounter = random.randint(0, 2)
 
-        randomadd = random.randint(0, 6)
+        randomadd = random.randint(0, 6) #random noise
 
-        TurnCounter+=1
+        TurnCounter+=1 #this section moves where the player is looking since this server has an overfishing mechanic, so you can't fish in the same spot a lot
+        #note there is an intentional camera drift over long periods of fishing, so stand somewhere with water on all sides of you
         if TurnCounter < 4: 
             pyautogui.moveTo(1170+randomadd, 531, random.uniform(0.2, 0.25)) #960 x is center of the screen and 531 y is center when not in fullscreen
         if TurnCounter > 4: 
@@ -167,17 +165,19 @@ def AutoFish(): #Auto fishes moveto does not work currently
         time.sleep(random.uniform(0.2, 0.3))
 
         pyautogui.click(button='right')
-        BobberCords = None
-        while BobberCords == None:
-            time.sleep(1.5)
-            BobberCords=FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2)
+
+        time.sleep(1.8)
+        BobberCords=FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2)
         print("THESE ARE BOBBER CORDS")
         print(BobberCords)
-        xcord = BobberCords[0]
-        ycord = BobberCords[1]
+        if BobberCords != None: #handles if bobber is not found
+            xcord = BobberCords[0]
+            ycord = BobberCords[1]
         confidencecounter = 0
         starttimer = time.time()
         while 1:
+            if BobberCords == None: #If the search did not find the bobber, it is usually because there is a fish on the line, so we can end the loop
+                break
             endtimer = time.time()
             if (endtimer-starttimer) > 12: #if the program gets stuck it will timeout after x seconds and reset
                 print("TIMEOUT RESET")
@@ -187,7 +187,7 @@ def AutoFish(): #Auto fishes moveto does not work currently
             if pix[2] >= 100 and pix[2] <=200:     #check if B value of RGB is between 100 and 200 if true fish detected
                 print("MIGHT BE FISH")
                 confidencecounter+=1
-                if confidencecounter == 2:
+                if confidencecounter == 3:
                     print('FISH FOUND')
                     print(pix)
                     break
@@ -204,7 +204,7 @@ def FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2): #
     pixelskip= 9 
     while 1:
         try:
-            color = pixel[xstartcord+xcounter, ystartcord+ycounter] #returns the RGB color of the pixel checked in a tuple 
+            color = pixel[xstartcord+xcounter, ystartcord+ycounter] #RGB color of the pixel
             xcounter+=pixelskip
             if xcounter+xstartcord>=xendcord: #When the y counter is above the end cord it resets to go to the next line
                 xcounter = 0
@@ -212,6 +212,7 @@ def FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2): #
                 if ycounter+ystartcord>=yendcord:#same as above but for x and when it reaches the end then the bobber isnt found
                     print("obj NOT FOUND, DECREASING SKIP")
                     pixelskip-=2
+                    ycounter=0
                     if pixelskip == 3:
                         print("obj NOT FOUND, RETURNING NONE")
                         ObjCords = None
@@ -220,7 +221,7 @@ def FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2): #
             print(xstartcord+xcounter, ystartcord+ycounter)
             if color == (objcolor1) or color == (objcolor2):#RBG of the bobber or obj 
                 print('OBJ FOUND')
-                ObjCords = (xstartcord+xcounter+2, ystartcord+ycounter-2)
+                ObjCords = (xstartcord+xcounter, ystartcord+ycounter)
                 return ObjCords
         except:
             print("obj NOT FOUND+EXCEPTION, DECREASING SKIP")
@@ -308,6 +309,8 @@ frame.pack(pady=20, padx=60, fill="both", expand=True)
 
 label = customtkinter.CTkLabel(master=frame, text="AutoTrappedMC alpha", font=("Roboto", 36))
 label.pack(pady=12, padx=10)
+label1 = customtkinter.CTkLabel(master=frame, text="Make sure to run minecraft in windowed mode", font=("Roboto", 30))
+label1.pack(pady=6, padx=10)
 label1 = customtkinter.CTkLabel(master=frame, text="Hotkeys Below", font=("Roboto", 30))
 label1.pack(pady=6, padx=10)
 
