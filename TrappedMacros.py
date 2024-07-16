@@ -320,8 +320,10 @@ label3 = customtkinter.CTkLabel(master=frame, text="Sellall ' ' '", font=("Robot
 label3.pack(pady=6, padx=10)
 label4 = customtkinter.CTkLabel(master=frame, text="Hold M1 & W ' ] '", font=("Roboto", 24))
 label4.pack(pady=6, padx=10)
-label5 = customtkinter.CTkLabel(master=frame, text="Autofish - can't be fullscreen' = '", font=("Roboto", 24))
+label5 = customtkinter.CTkLabel(master=frame, text="Autofish' = '", font=("Roboto", 24))
 label5.pack(pady=6, padx=10)
+label7 = customtkinter.CTkLabel(master=frame, text="Autofarm' - '", font=("Roboto", 24))
+label7.pack(pady=6, padx=10)
 label6 = customtkinter.CTkLabel(master=frame, text="Restart Program ' esc '", font=("Roboto", 24))
 label6.pack(pady=6, padx=10)
 
