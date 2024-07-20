@@ -222,6 +222,7 @@ def FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2): #
             if color == (objcolor1) or color == (objcolor2):#RBG of the bobber or obj 
                 print('OBJ FOUND')
                 ObjCords = (xstartcord+xcounter, ystartcord+ycounter)
+                #ObjCords = FindCenterOfObj(objcolor1, objcolor2, ObjCords, pixel) #untested idk if this works
                 return ObjCords
         except:
             print("obj NOT FOUND+EXCEPTION, DECREASING SKIP")
@@ -230,6 +231,44 @@ def FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2): #
                 print("obj NOT FOUND+EXCEPTION, RETURNING NONE")
                 ObjCords = None
                 return ObjCords
+
+def FindCenterOfObj(objcolor1, objcolor2, ObjCords, pixel):#finds the center of the obj and returns its cords
+    xcord = ObjCords[0]
+    ycord = ObjCords[1]
+    rightedge = None
+    leftedge = None
+    topedge = None
+    bottomedge = None
+    for x in range(26):
+        color = pixel[xcord+x, ycord]
+        if color != (objcolor1) and color != (objcolor2):#RBG of the bobber or obj 
+            if rightedge == None:
+                print('right EDGE FOUND')
+                rightedge = xcord+x
+        color = pixel[xcord-x, ycord]
+        if color != (objcolor1) and color != (objcolor2):#RBG of the bobber or obj 
+            if leftedge == None:
+                print('left EDGE FOUND')
+                leftedge = xcord-x
+        color = pixel[xcord, ycord+x]
+        if color != (objcolor1) and color != (objcolor2):#RBG of the bobber or obj 
+            if topedge == None:
+                print('top EDGE FOUND')
+                topedge = ycord+x
+        color = pixel[xcord, ycord-x]
+        if color != (objcolor1) and color != (objcolor2):#RBG of the bobber or obj 
+            if bottomedge == None:
+                print('bottom EDGE FOUND')
+                bottomedge = ycord-x
+    if rightedge !=None: #in case an edge is not found it will simply return the original obj cords 
+        if leftedge !=None:
+            if bottomedge !=None:
+                if topedge !=None:
+                    xcord = (rightedge+leftedge)/2
+                    ycord = (topedge+bottomedge)/2
+                    ObjCords = (xcord, ycord)
+    return ObjCords
+
 
 def StoreEmeralds():
     pyautogui.press('enter')
