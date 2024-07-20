@@ -1,4 +1,4 @@
-from pyautogui import *
+#from pyautogui import *
 import pyautogui, time, keyboard, random, os, sys, threading, customtkinter, multiprocessing, signal
 from PIL import ImageGrab
 
@@ -126,9 +126,9 @@ def MovementAdjustment(): #looks for a certain color of pixel in tilled dirt the
 def AutoFish(): #Fishes automatically 
     FishCounter = random.randint(0, 2)
     TurnCounter = 0
-    xstartcord = 900 #start and end cords are for making the box to search for the bobber
+    xstartcord = 890 #start and end cords are for making the box to search for the bobber
     ystartcord= 350 
-    xendcord = 1000
+    xendcord = 1010
     yendcord = 600
     objcolor1 = 211, 42, 42 #RBG of bobber we are looking for
     objcolor2 = 208, 41, 41 #2nd RBG of bobber
@@ -137,7 +137,7 @@ def AutoFish(): #Fishes automatically
         FishCounter+=1
         print(FishCounter)
         if autosellbool == '1' or autosellbool == True:
-            if FishCounter == 25: #autosells fish in emf shop
+            if FishCounter == 23: #autosells fish in emf shop
                 time.sleep(.25)
                 pyautogui.press('enter')
                 pyautogui.write('/emf shop', interval=random.uniform(0.025, 0.04))
@@ -156,9 +156,9 @@ def AutoFish(): #Fishes automatically
         TurnCounter+=1 #this section moves where the player is looking since this server has an overfishing mechanic, so you can't fish in the same spot a lot
         #note there is an intentional camera drift over long periods of fishing, so stand somewhere with water on all sides of you
         if TurnCounter < 4: 
-            pyautogui.moveTo(1170+randomadd, 531, random.uniform(0.2, 0.25)) #960 x is center of the screen and 531 y is center when not in fullscreen
+            pyautogui.moveTo(1170+randomadd, 527, random.uniform(0.2, 0.25)) #960 x is center of the screen and 531 y is center for windows 10, 527 is center for windows 11 because taskbar is different
         if TurnCounter > 4: 
-            pyautogui.moveTo(750+randomadd, 531, random.uniform(0.2, 0.25))
+            pyautogui.moveTo(750+randomadd, 527, random.uniform(0.2, 0.25))
         if TurnCounter > 7:
             TurnCounter = 0
         
@@ -166,7 +166,7 @@ def AutoFish(): #Fishes automatically
 
         pyautogui.click(button='right')
 
-        time.sleep(1.8)
+        time.sleep(1.9)
         BobberCords=FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2)
         print("THESE ARE BOBBER CORDS")
         print(BobberCords)
@@ -179,7 +179,7 @@ def AutoFish(): #Fishes automatically
             if BobberCords == None: #If the search did not find the bobber, it is usually because there is a fish on the line, so we can end the loop
                 break
             endtimer = time.time()
-            if (endtimer-starttimer) > 12: #if the program gets stuck it will timeout after x seconds and reset
+            if (endtimer-starttimer) > 7: #if the program gets stuck it will timeout after x seconds and reset
                 print("TIMEOUT RESET")
                 break
             pix = pyautogui.pixel(xcord, ycord)

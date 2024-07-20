@@ -5,21 +5,21 @@ from PIL import Image, ImageGrab
 if __name__ == '__main__':
     # !!!!! This file is for testing functions and is not used in the actual program !!!!
 
-    #print(pyautogui.displayMousePosition())
-    time.sleep(5)
-    pyautogui.press('enter')
-    pyautogui.write('/emf shop', interval=random.uniform(0.025, 0.04))
-    pyautogui.press('enter')
-    time.sleep(random.uniform(0.05, 0.1))
-    pyautogui.moveTo(1015, 490, random.uniform(0.4, 0.8))
-    time.sleep(random.uniform(0.05, 0.1))
-    pyautogui.click()
-    time.sleep(random.uniform(0.05, 0.1))
-    pyautogui.click()
-    time.sleep(random.uniform(0.05, 0.1))
-    pyautogui.press('esc')
-    time.sleep(random.uniform(0.05, 0.1))
-    FishCounter = random.randint(0, 3)
+    print(pyautogui.displayMousePosition())
+    # time.sleep(5)
+    # pyautogui.press('enter')
+    # pyautogui.write('/emf shop', interval=random.uniform(0.025, 0.04))
+    # pyautogui.press('enter')
+    # time.sleep(random.uniform(0.05, 0.1))
+    # pyautogui.moveTo(1015, 490, random.uniform(0.4, 0.8))
+    # time.sleep(random.uniform(0.05, 0.1))
+    # pyautogui.click()
+    # time.sleep(random.uniform(0.05, 0.1))
+    # pyautogui.click()
+    # time.sleep(random.uniform(0.05, 0.1))
+    # pyautogui.press('esc')
+    # time.sleep(random.uniform(0.05, 0.1))
+    # FishCounter = random.randint(0, 3)
 
     #1500, 550
     
