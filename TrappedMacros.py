@@ -167,32 +167,34 @@ def AutoFish(): #Fishes automatically #after some testing I have concluded that 
 
         pyautogui.click(button='right')
 
-        time.sleep(1.9)
-        BobberCords=FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2)
+        time.sleep(2.3)
+        ObjCords=FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2)
         print("THESE ARE BOBBER CORDS")
-        print(BobberCords)
-        if BobberCords != None: #handles if bobber is not found
-            xcord = BobberCords[0]
-            ycord = BobberCords[1]
+        print(ObjCords)
         confidencecounter = 0
         starttimer = time.time()
         while 1:
-            if BobberCords == None: #If the search did not find the bobber, it is usually because there is a fish on the line, so we can end the loop
+            if ObjCords == None: #If the search did not find the bobber, it is usually because there is a fish on the line, so we can end the loop
                 break
+            xcord = ObjCords[0]
+            ycord = ObjCords[1]
             endtimer = time.time()
             if (endtimer-starttimer) > 7: #if the program gets stuck it will timeout after x seconds and reset
                 print("TIMEOUT RESET")
                 break
             pix = pyautogui.pixel(xcord, ycord)
+            pixel = ImageGrab.grab().load()
             #print(pix)
             if pix[2] >= 100 and pix[2] <=200:     #check if B value of RGB is between 100 and 200 if true fish detected
                 print("MIGHT BE FISH")
+                print(pix)
                 confidencecounter+=1
+                ObjCords = FindCenterOfObj(objcolor1, objcolor2, ObjCords, pixel)
                 if confidencecounter == 3:
                     print('FISH FOUND')
                     print(pix)
                     break
-            else:
+            else: 
                 confidencecounter = 0
             time.sleep(.15)
         pyautogui.click(button='right')
@@ -218,8 +220,8 @@ def FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2): #
                         print("obj NOT FOUND, RETURNING NONE")
                         ObjCords = None
                         return ObjCords
-            print(color)
-            print(xstartcord+xcounter, ystartcord+ycounter)
+            #print(color)
+            #print(xstartcord+xcounter, ystartcord+ycounter)
             if color == (objcolor1) or color == (objcolor2):#RBG of the bobber or obj 
                 print('OBJ FOUND')
                 ObjCords = (xstartcord+xcounter, ystartcord+ycounter)
@@ -244,30 +246,35 @@ def FindCenterOfObj(objcolor1, objcolor2, ObjCords, pixel):#finds the center of 
         color = pixel[xcord+x, ycord]
         if color != (objcolor1) and color != (objcolor2):#RBG of the bobber or obj 
             if rightedge == None:
-                print('right EDGE FOUND')
                 rightedge = xcord+x
+        else:
+            rightedge == None
         color = pixel[xcord-x, ycord]
         if color != (objcolor1) and color != (objcolor2):#RBG of the bobber or obj 
             if leftedge == None:
-                print('left EDGE FOUND')
                 leftedge = xcord-x
+        else:
+            leftedge == None
         color = pixel[xcord, ycord+x]
         if color != (objcolor1) and color != (objcolor2):#RBG of the bobber or obj 
             if topedge == None:
-                print('top EDGE FOUND')
                 topedge = ycord+x
+        else:
+            topedge == None
         color = pixel[xcord, ycord-x]
         if color != (objcolor1) and color != (objcolor2):#RBG of the bobber or obj 
             if bottomedge == None:
-                print('bottom EDGE FOUND')
                 bottomedge = ycord-x
+        else:
+            bottomedge == None
     if rightedge !=None: #in case an edge is not found it will simply return the original obj cords 
         if leftedge !=None:
             if bottomedge !=None:
-                if topedge !=None:
+                if topedge !=None: 
                     xcord = round((rightedge+leftedge)/2)
                     ycord = round((topedge+bottomedge)/2)
                     ObjCords = (xcord, ycord)
+                    print(f'Edges found center = {ObjCords}')
     return ObjCords
 
 
@@ -281,6 +288,7 @@ def StoreEmeralds():
     yendcord = 730
     objcolor1 = 23, 218, 97 #emerald rbg
     objcolor2 = 15, 142, 63 #emerald block rbg
+    pyautogui.moveTo(random.randint(550, 1200), random.randint(770, 800))
     for x in range(2): #looks for block and emeralds
         EmeraldCords = FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2)
         print(EmeraldCords)
