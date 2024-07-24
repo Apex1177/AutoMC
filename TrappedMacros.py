@@ -1,5 +1,5 @@
 #from pyautogui import *
-import pyautogui, time, keyboard, random, os, sys, threading, customtkinter, multiprocessing, signal
+import pyautogui, time, keyboard, random, os, sys, threading, customtkinter, multiprocessing, signal, math
 from PIL import ImageGrab
 
 def WaitingLoop(): #waits for a hotkey to be pressed
@@ -123,7 +123,8 @@ def MovementAdjustment(): #looks for a certain color of pixel in tilled dirt the
                 break
         break
 
-def AutoFish(): #Fishes automatically 
+def AutoFish(): #Fishes automatically #after some testing I have concluded that this function is approximately 27% less efficient than fishing normally
+    #I hope to make the program more accurate and efficient with the FindCenterOfObj func. 
     FishCounter = random.randint(0, 2)
     TurnCounter = 0
     xstartcord = 890 #start and end cords are for making the box to search for the bobber
@@ -222,7 +223,7 @@ def FindObj(xstartcord, ystartcord, xendcord, yendcord, objcolor1, objcolor2): #
             if color == (objcolor1) or color == (objcolor2):#RBG of the bobber or obj 
                 print('OBJ FOUND')
                 ObjCords = (xstartcord+xcounter, ystartcord+ycounter)
-                #ObjCords = FindCenterOfObj(objcolor1, objcolor2, ObjCords, pixel) #untested idk if this works
+                ObjCords = FindCenterOfObj(objcolor1, objcolor2, ObjCords, pixel) #Fixes weird edge cases during other functions
                 return ObjCords
         except:
             print("obj NOT FOUND+EXCEPTION, DECREASING SKIP")
@@ -264,8 +265,8 @@ def FindCenterOfObj(objcolor1, objcolor2, ObjCords, pixel):#finds the center of 
         if leftedge !=None:
             if bottomedge !=None:
                 if topedge !=None:
-                    xcord = (rightedge+leftedge)/2
-                    ycord = (topedge+bottomedge)/2
+                    xcord = round((rightedge+leftedge)/2)
+                    ycord = round((topedge+bottomedge)/2)
                     ObjCords = (xcord, ycord)
     return ObjCords
 
