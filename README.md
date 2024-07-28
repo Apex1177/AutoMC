@@ -1,4 +1,4 @@
-This is a for fun project I made in the summer of 2024 before freshman year of college to automate certain tasks in a minecraft.
+This is a for fun project I made in the summer of 2024 before freshman year of college to automate certain tasks in minecraft.
 Some modifications are done so that it can be used on a minecraft server called TrappedMC.
 Note that this program is designed to be played in 1920x1080 in windowed mode with fullbright enabled and does not work with any retextures of the game. 
 
