@@ -13,7 +13,6 @@ def WaitingLoop(): #waits for a hotkey to be pressed
     keyboard.wait()
 
 def Condense(): #hotkey to run /condense cmd
-
     pyautogui.press('enter')
     pyautogui.write('/con', interval=random.uniform(0.01, 0.02))
     pyautogui.press('tab')   #presses tab to autocomplete 
@@ -277,7 +276,6 @@ def FindCenterOfObj(objcolor1, objcolor2, ObjCords, pixel):#finds the center of 
                     print(f'Edges found center = {ObjCords}')
     return ObjCords
 
-
 def StoreEmeralds():
     pyautogui.press('enter')
     pyautogui.write('/ec', interval=random.uniform(0.025, 0.04))
@@ -354,14 +352,12 @@ root.geometry("1000x700") #size of application
 
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
-
 label = customtkinter.CTkLabel(master=frame, text="AutoTrappedMC alpha", font=("Roboto", 36))
 label.pack(pady=12, padx=10)
 label1 = customtkinter.CTkLabel(master=frame, text="Make sure to run minecraft in windowed mode", font=("Roboto", 30))
 label1.pack(pady=6, padx=10)
 label1 = customtkinter.CTkLabel(master=frame, text="Hotkeys Below", font=("Roboto", 30))
 label1.pack(pady=6, padx=10)
-
 label2 = customtkinter.CTkLabel(master=frame, text="Condense ' ` '", font=("Roboto", 24))
 label2.pack(pady=6, padx=10)
 label3 = customtkinter.CTkLabel(master=frame, text="Sellall ' ' '", font=("Roboto", 24))
@@ -388,10 +384,6 @@ def on_checkbox_toggle():
     global emeraldstorebool
     autosellbool = check_autosell.get()
     emeraldstorebool = check_storeemerald.get()
-    print("Autosell : ")
-    print(autosellbool)
-    print("Emerald store : ")
-    print(emeraldstorebool)
 
 check_autosell = customtkinter.StringVar(value="on")
 check_storeemerald = customtkinter.StringVar(value="on")
@@ -401,12 +393,10 @@ autosellcheckbox = customtkinter.CTkCheckBox(master=frame, text="Turn Off Storin
 autosellcheckbox.pack(pady=12, padx=10)
 
 if __name__ == '__main__':
-    root.mainloop() # need to add something to show which hotkeys do what
+    root.mainloop() 
     print('Progam started')
-    print("Autosell : ")
-    print(autosellbool)
-    print("Emerald store : ")
-    print(emeraldstorebool)
+    print(f"Autosell : {autosellbool}")
+    print(f"Emerald store : {emeraldstorebool}")
     CheckRestart = multiprocessing.Process(target=CheckForRestart) #If esc is ever pressed the program will restart
     CheckRestart.start()
     WaitingLoop()
