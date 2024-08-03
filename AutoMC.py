@@ -1,5 +1,4 @@
-#from pyautogui import *
-import pyautogui, time, keyboard, random, os, sys, threading, customtkinter, multiprocessing, signal, math
+import pyautogui, time, keyboard, random, os, sys, customtkinter, multiprocessing, signal
 from PIL import ImageGrab
 
 def WaitingLoop(): #waits for a hotkey to be pressed
@@ -352,7 +351,7 @@ root.geometry("1000x700") #size of application
 
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
-label = customtkinter.CTkLabel(master=frame, text="AutoTrappedMC alpha", font=("Roboto", 36))
+label = customtkinter.CTkLabel(master=frame, text="AutoMC alpha", font=("Roboto", 36))
 label.pack(pady=12, padx=10)
 label1 = customtkinter.CTkLabel(master=frame, text="Make sure to run minecraft in windowed mode", font=("Roboto", 30))
 label1.pack(pady=6, padx=10)
